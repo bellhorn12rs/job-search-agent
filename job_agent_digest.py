@@ -42,6 +42,7 @@ SALARY_FLOOR = 170000
 # A job's location text must contain at least one of these (case-insensitive)
 # to be kept - this is what was missing before, which is why fully on-site
 # listings in cities like Austin, London, or Bangalore were getting through.
+EXCLUDED_LOCATIONS = ["india", "bangalore", "mumbai", "hyderabad", "pune", "delhi", "chennai", "gurugram"]
 LOCATION_KEYWORDS = ["remote", "portland"]
 
 # Ratio threshold for treating two words as the same via fuzzy match (used
@@ -129,10 +130,12 @@ def title_matches_targets(title):
 
 
 def location_matches_target(location):
-    """True if the listing is remote or based in/around Portland, OR."""
+    """True if the listing is remote or based in/around Portland, OR, and not abroad."""
     if not location:
         return False
     loc = location.lower()
+    if any(bad_loc in loc for bad_loc in EXCLUDED_LOCATIONS):
+        return False
     return any(keyword in loc for keyword in LOCATION_KEYWORDS)
 
 
@@ -431,9 +434,12 @@ if __name__ == "__main__":
 
         tracker = load_tracker()
         new_jobs = apply_tracker(matched_jobs, tracker)
+        
+        # Limit to a maximum of 10 fresh jobs per day
+        new_jobs = new_jobs[:10]
+        
         save_tracker(tracker)
-        print(f"{len(matched_jobs)} matched today's criteria; {len(new_jobs)} are new/untriaged.")
-
+        print(f"{len(matched_jobs)} matched today's criteria; {len(new_jobs)} are new/untriaged (capped at 10).")
         if new_jobs:
             digest_html = generate_html_digest(new_jobs)
             send_email_digest(digest_html, len(new_jobs))
