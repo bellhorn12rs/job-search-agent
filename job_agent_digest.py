@@ -71,7 +71,7 @@ GREENHOUSE_COMPANIES = [
     # Core SaaS / dev tools / infra
     "wizinc", "figma", "airtable", "asana", "webflow", "databricks", "elastic",
     "mongodb", "gitlab", "pagerduty", "fastly", "netlify", "cloudflare",
-    "vercel", "datadog",
+    "vercel", "datadog"
     # GTM / RevOps / Sales tooling - high-density for RevOps, Sales Ops,
     # Salesforce, and Business Systems roles
     "salesloft", "attentive", "postscript", "braze", "iterable", "klaviyo",
@@ -233,12 +233,12 @@ def fetch_live_google_jobs():
 
     print("Fetching live jobs via Google Jobs (SerpAPI)...")
     url = "https://serpapi.com/search"
+    # Automatically build an OR query from your TARGET_TITLES
+    titles_query = " OR ".join([f'"{t}"' for t in TARGET_TITLES])
+    
     params = {
         "engine": "google_jobs",
-        "q": (
-            '("Solutions Architect" OR "GTM Engineer" OR "Salesforce Administrator" '
-            'OR "Revenue Operations Engineer") ("Remote" OR "Portland")'
-        ),
+        "q": f'({titles_query}) ("Remote" OR "Portland")',
         "location": "United States",
         "api_key": SERPAPI_KEY,
     }
