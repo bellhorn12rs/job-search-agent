@@ -69,7 +69,7 @@ MIN_PREFIX_LEN = 4
 # API, so they can't be added this way.
 GREENHOUSE_COMPANIES = [
     # Core SaaS / dev tools / infra
-    "figma", "airtable", "asana", "webflow", "databricks", "elastic",
+    "wizinc", "figma", "airtable", "asana", "webflow", "databricks", "elastic",
     "mongodb", "gitlab", "pagerduty", "fastly", "netlify", "cloudflare",
     "vercel", "datadog",
     # GTM / RevOps / Sales tooling - high-density for RevOps, Sales Ops,
